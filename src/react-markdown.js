@@ -7,7 +7,7 @@ const remarkRehype = require('remark-rehype')
 const PropTypes = require('prop-types')
 // @ts-ignore remove when typed
 const html = require('property-information/html')
-const filter = require('./rehype-filter')
+const useHastNode = require('./useHastNode')
 const uriTransformer = require('./uri-transformer')
 const childrenToReact = require('./ast-to-react.js').hastChildrenToReact
 
@@ -90,28 +90,23 @@ function ReactMarkdown(options) {
     }
   }
 
-  const processor = unified()
-    .use(parse)
-    // TODO: deprecate `plugins` in v7.0.0.
-    .use(options.remarkPlugins || options.plugins || [])
-    .use(remarkRehype, {allowDangerousHtml: true})
-    .use(options.rehypePlugins || [])
-    .use(filter, options)
+  const hastNode = useHastNode(options)
 
-  /** @type {Root} */
-  // @ts-ignore we’ll throw if it isn’t a root next.
-  const hastNode = processor.runSync(processor.parse(options.children || ''))
-
-  if (hastNode.type !== 'root') {
+  if (hastNode && hastNode.type !== 'root') {
+    // TODO is throwing the correct approach here?
     throw new TypeError('Expected a `root` node')
   }
 
-  /** @type {ReactElement} */
-  let result = React.createElement(
-    React.Fragment,
-    {},
-    childrenToReact({options: options, schema: html, listDepth: 0}, hastNode)
-  )
+  let result = null
+
+  if (hastNode) {
+    /** @type {ReactElement} */
+    result = React.createElement(
+      React.Fragment,
+      {},
+      childrenToReact({options: options, schema: html, listDepth: 0}, hastNode)
+    )
+  }
 
   if (options.className) {
     result = React.createElement('div', {className: options.className}, result)
