@@ -68,7 +68,7 @@
     "Evan Hensleigh <futuraprime@gmail.com>"
   ],
   "types": "src/react-markdown.d.ts",
-  "main": "src/react-markdown.js",
+  "main": "react-markdown.min.js",
   "unpkg": "react-markdown.min.js",
   "files": [
     "src/",
@@ -137,7 +137,7 @@
   },
   "scripts": {
     "prepack": "npm run build && npm run format",
-    "build:ts": "rimraf \"{src/**,test/**,}.d.ts\" && tsc && type-coverage",
+    "build:ts": "rimraf \"{src/**,test/**,}.d.ts\" && tsc",
     "build:umd": "rollup --silent -c",
     "build:umdcheck": "printf 'ES5? ' && uglifyjs react-markdown.min.js > /dev/null && echo 'Yes'",
     "build": "run-s build:*",
