@@ -7,6 +7,7 @@ const html = require('property-information/html')
 const useHastNode = require('./use-hast-note')
 const uriTransformer = require('./uri-transformer')
 const childrenToReact = require('./ast-to-react.js').hastChildrenToReact
+const Parser = require('./parser')
 
 /**
  * @typedef {import('react').ReactNode} ReactNode
@@ -153,3 +154,7 @@ ReactMarkdown.propTypes = {
 }
 
 ReactMarkdown.uriTransformer = uriTransformer
+
+ReactMarkdown.parseSync = Parser.parseSync
+
+ReactMarkdown.parseAsync = Parser.parseAsync

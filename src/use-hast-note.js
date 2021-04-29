@@ -1,10 +1,7 @@
 'use strict'
 
 const React = require('react')
-const unified = require('unified')
-const parse = require('remark-parse')
-const remarkRehype = require('remark-rehype')
-const filter = require('./rehype-filter')
+const Parser = require('./parser')
 
 module.exports = useHastNode
 
@@ -31,47 +28,26 @@ module.exports = useHastNode
  */
 
 function useHastNode(options) {
+  const nodeRef = React.useRef()
+  const [, render] = React.useState(0)
   const asyncMode = options.asyncMode
-  const children = options.children || ''
-  const [hastNode, setHastNode] = React.useState(null)
   React.useEffect(() => {
     if (!asyncMode) {
-      setHastNode(null)
       return
     }
-
-    const processor = createProcessor(options)
-
-    /** @type {Root} */
-    // @ts-ignore we’ll throw if it isn’t a root next.
-    processor
-      .run(processor.parse(children))
-      .then((node) => {
-        setHastNode(node)
-      })
-      .catch((error) => {
-        console.log('Markdown parsing error:', error.message)
-      })
-  }, [asyncMode, children])
-
+    let isCancelled = false
+    Parser.parseAsync(options).then((hastNode) => {
+      if (isCancelled) {
+        return
+      }
+      nodeRef.current = hastNode
+      render((c) => c + 1)
+    })
+    return () => ((isCancelled = true), void 0)
+  })
   if (asyncMode) {
-    return hastNode
+    return nodeRef.current
   }
-
-  const processor = createProcessor(options)
-  /** @type {Root} */
-  // @ts-ignore we’ll throw if it isn’t a root next.
-  return processor.runSync(processor.parse(children))
-}
-
-function createProcessor(options) {
-  return (
-    unified()
-      .use(parse)
-      // TODO: deprecate `plugins` in v7.0.0.
-      .use(options.remarkPlugins || options.plugins || [])
-      .use(remarkRehype, {allowDangerousHtml: true})
-      .use(options.rehypePlugins || [])
-      .use(filter, options)
-  )
+  nodeRef.current = Parser.parseSync(options)
+  return nodeRef.current
 }
