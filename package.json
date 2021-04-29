@@ -137,7 +137,7 @@
   },
   "scripts": {
     "prepack": "npm run build && npm run format",
-    "build:ts": "rimraf \"{src/**,test/**,}.d.ts\" && tsc && type-coverage",
+    "build:ts": "rimraf \"{src/**,test/**,}.d.ts\" && tsc",
     "build:umd": "rollup --silent -c",
     "build:umdcheck": "printf 'ES5? ' && uglifyjs react-markdown.min.js > /dev/null && echo 'Yes'",
     "build": "run-s build:*",

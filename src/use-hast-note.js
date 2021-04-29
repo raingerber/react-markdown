@@ -39,6 +39,7 @@ function useHastNode(options) {
       setHastNode(null)
       return
     }
+
     const processor = createProcessor(options)
 
     /** @type {Root} */

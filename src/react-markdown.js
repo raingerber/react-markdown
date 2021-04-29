@@ -1,13 +1,10 @@
 'use strict'
 
 const React = require('react')
-const unified = require('unified')
-const parse = require('remark-parse')
-const remarkRehype = require('remark-rehype')
 const PropTypes = require('prop-types')
 // @ts-ignore remove when typed
 const html = require('property-information/html')
-const useHastNode = require('./useHastNode')
+const useHastNode = require('./use-hast-note')
 const uriTransformer = require('./uri-transformer')
 const childrenToReact = require('./ast-to-react.js').hastChildrenToReact
 
