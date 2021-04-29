@@ -44,7 +44,7 @@ function useHastNode(options) {
       render((c) => c + 1)
     })
     return () => ((isCancelled = true), void 0)
-  }, [options.children])
+  }, [asyncMode, options.children])
 
   if (asyncMode) {
     return nodeRef.current
