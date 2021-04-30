@@ -28,7 +28,7 @@ module.exports = useHastNode
  */
 
 function useHastNode(options) {
-  const nodeRef = React.useRef()
+  const nodeRef = React.useRef(null)
   const [, render] = React.useState(0)
   const asyncMode = options.asyncMode
   React.useEffect(() => {

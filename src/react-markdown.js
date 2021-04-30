@@ -4,7 +4,7 @@ const React = require('react')
 const PropTypes = require('prop-types')
 // @ts-ignore remove when typed
 const html = require('property-information/html')
-const useHastNode = require('./use-hast-note')
+const useHastNode = require('./use-hast-node')
 const uriTransformer = require('./uri-transformer')
 const childrenToReact = require('./ast-to-react.js').hastChildrenToReact
 const Parser = require('./parser')
